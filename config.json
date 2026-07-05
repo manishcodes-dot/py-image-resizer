@@ -1,0 +1,23 @@
+{
+    "quality": 85,
+    "lossless": false,
+    "preserve_metadata": true,
+    "overwrite": false,
+    "delete_original": false,
+    "open_after_complete": false,
+    "output_mode": "same",
+    "custom_output_dir": "",
+    "resize_mode": "original",
+    "custom_width": 1280,
+    "custom_height": 720,
+    "maintain_aspect": true,
+    "theme": "dark",
+    "ai_api_key": "",
+    "ai_provider": "Grok",
+    "ai_output_folder": "",
+    "ai_image_size": "1024x1024",
+    "ai_num_images": 1,
+    "ai_quality": "Standard",
+    "ai_save_history": true,
+    "ai_auto_save": true
+}
