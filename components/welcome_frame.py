@@ -238,8 +238,8 @@ class WelcomeFrame(ctk.CTkFrame):
         files = filedialog.askopenfilenames(
             title="Select Images",
             filetypes=[
-                ("Supported Images", "*.jpg;*.jpeg;*.png"),
-                ("JPEG Images", "*.jpg;*.jpeg"),
+                ("Supported Images", "*.jpg *.jpeg *.png"),
+                ("JPEG Images", "*.jpg *.jpeg"),
                 ("PNG Images", "*.png")
             ]
         )

@@ -1,5 +1,6 @@
 import os
 import shutil
+import io
 from typing import Dict, Any, Tuple
 from PIL import Image
 from utils.file_helpers import calculate_new_dimensions, get_image_info
@@ -100,8 +101,32 @@ class ImageConverter:
                     if icc_profile is not None:
                         save_args["icc_profile"] = icc_profile
 
-                # Save to temp path first to prevent corrupted/half-written files
-                img.save(temp_dest_path, "WEBP", **save_args)
+                # Try saving to a buffer and lowering quality if it's over 100kb
+                max_size_bytes = 100 * 1024
+                
+                if save_args.get("lossless"):
+                    buffer = io.BytesIO()
+                    img.save(buffer, "WEBP", **save_args)
+                    if buffer.tell() > max_size_bytes:
+                        # Fallback to lossy if it exceeds 100kb
+                        save_args["lossless"] = False
+                        if "quality" not in save_args or save_args["quality"] is None:
+                            save_args["quality"] = 90
+                    else:
+                        with open(temp_dest_path, "wb") as f:
+                            f.write(buffer.getvalue())
+                
+                if not save_args.get("lossless"):
+                    current_quality = save_args.get("quality", 90)
+                    while current_quality >= 5:
+                        save_args["quality"] = current_quality
+                        buffer = io.BytesIO()
+                        img.save(buffer, "WEBP", **save_args)
+                        if buffer.tell() <= max_size_bytes or current_quality == 5:
+                            with open(temp_dest_path, "wb") as f:
+                                f.write(buffer.getvalue())
+                            break
+                        current_quality -= 5
 
             # Move temp file to final destination
             if os.path.exists(dest_path):

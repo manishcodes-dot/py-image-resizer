@@ -1,5 +1,6 @@
 import os
 import re
+import io
 from typing import List, Tuple
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
@@ -8,6 +9,18 @@ from PIL import Image
 import tkinter as tk
 from components.theme import THEME_COLORS, FONTS
 from tkinterdnd2 import DND_FILES
+
+def save_webp_under_100kb(img: Image.Image, path: str, initial_quality: int = 90) -> None:
+    max_size = 100 * 1024
+    current_quality = initial_quality
+    while current_quality >= 5:
+        buffer = io.BytesIO()
+        img.save(buffer, "WEBP", quality=current_quality)
+        if buffer.tell() <= max_size or current_quality == 5:
+            with open(path, "wb") as f:
+                f.write(buffer.getvalue())
+            break
+        current_quality -= 5
 
 def create_checkerboard(width: int, height: int, cell_size: int = 12) -> Image.Image:
     """Generates a high-quality checkerboard pattern PIL image for transparent background previews."""
@@ -203,9 +216,9 @@ class ResizerFrame(ctk.CTkFrame):
         file_path = filedialog.askopenfilename(
             title="Select Image to Resize",
             filetypes=[
-                ("Image Files", "*.jpg;*.jpeg;*.png"),
+                ("Image Files", "*.jpg *.jpeg *.png"),
                 ("PNG Images", "*.png"),
-                ("JPEG Images", "*.jpg;*.jpeg")
+                ("JPEG Images", "*.jpg *.jpeg")
             ]
         )
         if file_path:
@@ -666,8 +679,8 @@ class ResizerFrame(ctk.CTkFrame):
         
         if save_path:
             try:
-                # Save as WebP
-                target_img.save(save_path, "WEBP", quality=90)
+                # Save as WebP under 100kb
+                save_webp_under_100kb(target_img, save_path, initial_quality=90)
                 self.logger.info(f"Successfully exported WebP: {os.path.basename(save_path)}")
                 self.show_toast(f"Export Success! Saved {os.path.basename(save_path)}.", type="success")
             except Exception as e:
@@ -701,8 +714,8 @@ class ResizerFrame(ctk.CTkFrame):
         path_960 = os.path.join(dest_dir, f"{clean_name}..webp")
         
         try:
-            self.img_500.save(path_500, "WEBP", quality=90)
-            self.img_960.save(path_960, "WEBP", quality=90)
+            save_webp_under_100kb(self.img_500, path_500, initial_quality=90)
+            save_webp_under_100kb(self.img_960, path_960, initial_quality=90)
             
             self.logger.info(f"Batch exported: {os.path.basename(path_500)} and {os.path.basename(path_960)} to {dest_dir}")
             self.show_toast("Success! Saved both presets directly.", type="success")

@@ -159,3 +159,10 @@
 [2026-07-05 11:56:17] [INFO] OptiWebP started successfully. Ready for conversions.
 [2026-07-05 12:07:13] [INFO] OptiWebP started successfully. Ready for conversions.
 [2026-07-05 12:09:29] [INFO] OptiWebP started successfully. Ready for conversions.
+[2026-07-05 12:26:02] [INFO] OptiWebP started successfully. Ready for conversions.
+[2026-07-05 13:04:04] [INFO] OptiWebP started successfully. Ready for conversions.
+[2026-07-05 13:04:24] [INFO] Added 1 image(s) to queue.
+[2026-07-05 13:04:34] [INFO] Starting batch conversion of 1 images...
+[2026-07-05 13:04:35] [SUCCESS] ✓ alphabeast capsules supplement .png converted successfully. 2.17 MB → 174.37 KB (-92.1%)
+[2026-07-05 13:04:35] [SUCCESS] Batch conversion completed in 0.58s! Converted: 1, Skipped: 0, Failed: 0.
+[2026-07-05 13:55:15] [INFO] OptiWebP started successfully. Ready for conversions.
